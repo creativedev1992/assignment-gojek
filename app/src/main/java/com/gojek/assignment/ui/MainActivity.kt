@@ -18,15 +18,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),View.OnClickListener {
     lateinit var viewModel: RPMViewModel
-    var rootView:View?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        rootView =
-            getWindow().getDecorView().findViewById(android.R.id.content)
-
+        btnupdate.setOnClickListener(this)
         val component = DaggerAPIComponent
             .builder()
             .aPIModule(APIModule())
@@ -37,39 +34,39 @@ class MainActivity : AppCompatActivity() {
             ViewModelProviders.of(this, notificationViewModelFactory)
                 .get(RPMViewModel::class.java)
         viewModel.rpmLiveData?.observeForever {
-            Log.d("check", "response status" + it.status)
-           /* btnupdate.isEnabled = true
-            btnupdate.isClickable=true*/
-           // btnupdate.alpha=0.0f
             when (it.status) {
                 Resource.Status.SUCCESS -> {
                     val res = it.data as RPMResponse
                     Log.d("check", "response random" + res[0].random)
-                    tvrpm.setText(res.get(0).random)
+                    tvrpm.text = "${res.get(0).random}${getString(R.string.rstring_rpm)}"
                     btnupdate.isEnabled = true
                     btnupdate.isClickable=true
+                    btnupdate.alpha=1.0f
                     imgwheel.rotation= res.get(0).random.toFloat()
-
-                    Snackbar.make(rootView as View,"SPEED UPDATED",Snackbar.LENGTH_LONG)
+                    Snackbar.make(parentview,"SPEED UPDATED",Snackbar.LENGTH_LONG).show()
                 }
                 Resource.Status.ERROR -> {
                     btnupdate.isEnabled = true
                     btnupdate.isClickable=true
-                    Snackbar.make(rootView as View,"UNABLE TO UPDATE SPEED",Snackbar.LENGTH_LONG)
+                    Snackbar.make(parentview,"UNABLE TO UPDATE SPEED",Snackbar.LENGTH_LONG).show()
                 }
                 Resource.Status.LOADING -> {
                 }
             }
 
         }
-        btnupdate.setOnClickListener {
+    }
+
+    override fun onClick(v: View?) {
+        if(v?.id==R.id.btnupdate)
+        {
             btnupdate.isEnabled = false
             btnupdate.isClickable=false
-           // btnupdate.alpha=0.5f
+            btnupdate.alpha=0.4f
             GlobalScope.launch {
                 viewModel.fetchRPM()
             }
-            Toast.makeText(MainActivity@ this, "Fetching RPM", Toast.LENGTH_SHORT).show()
+            Snackbar.make(parentview,"Fetching RPM",Snackbar.LENGTH_LONG).show()
         }
     }
 }

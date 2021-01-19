@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">GojekAssignment</string>
+    <string name="rstring_rpm">\u0020 RPM</string>
+    <string name="rstring_0_rpm">0 RPM</string>
 </resources>

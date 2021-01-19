@@ -59,54 +59,40 @@ class MainActivityTest {
   @JvmField
   var rule = ActivityTestRule(MainActivity::class.java)
   @Test
-  fun isRpmSet() {
+  fun is_all_view_displayed() {
     onView(withId(R.id.tvrpm))
       .check(matches(isDisplayed()))
+    onView(withId(R.id.imgwheel))
+      .check(matches(isDisplayed()))
+    onView(withId(R.id.btnupdate))
+      .check(matches(isDisplayed()))
   }
+
   @Test
-  fun isRpm_Greater_than_0_Set() {
+  fun is_rpm_text_above_wheel() {
     onView(withId(R.id.tvrpm)) .check(isCompletelyAbove(withId(R.id.imgwheel)))
-
-  }
-  fun textViewTextColorMatcher(matcherColor: String): Matcher<View?>? {
-    return object : BoundedMatcher<View?, TextView>(TextView::class.java) {
-
-      override fun matchesSafely(textView: TextView): Boolean {
-        return matcherColor == textView.text.toString()
-      }
-
-      override fun describeTo(description: org.hamcrest.Description?) {
-        description?.appendText("with text color: $matcherColor")
-      }
-    }
-  }
-  class TextViewValueMatcher : org.junit.internal.matchers.TypeSafeMatcher<View>() {
-    override fun describeTo(description: org.hamcrest.Description?) {
-      description?.appendText("1")
-    }
-    override fun matchesSafely(item: View?): Boolean {
-      var textView =  item as TextView
-      var value = textView.text.toString()
-      var matching=false
-      if(value.toInt()==0)
-        matching=false
-      else
-        matching=true
-      return matching
-    }
-
   }
   @Test
-  fun isRpm_Should_not_empty() {
-    onView(withId(R.id.tvrpm)).check(matches(not(withText(""))));
-  }
-  @Test
-  fun tappingOnTitleOpensEditDialog() {
-    onView(withId(R.id.imgwheel)).check(matches(isDisplayed()))
+  fun is_update_btn_disable_after_click()
+  {
     onView(withId(R.id.btnupdate))
       .perform(click())
-    onView(withId(R.id.btnupdate)).check(matches(not(isEnabled())));
-    onView(withId(R.id.tvrpm))
-      .check(matches(isDisplayed()))
+    onView(withId(R.id.btnupdate)).check(matches(not(isEnabled())))
   }
+  @Test
+  fun is_update_btn_alpha_set_after_click()
+  {
+    onView(withId(R.id.btnupdate))
+      .perform(click())
+    onView(withId(R.id.btnupdate)).check(matches(withAlpha(.4f)))
+  }
+  @Test
+  fun is_rpm_not_empty_after_click()
+  {
+    onView(withId(R.id.btnupdate))
+      .perform(click())
+    onView(withId(R.id.tvrpm)).check(matches(not(withText(""))));
+  }
+
+
 }
