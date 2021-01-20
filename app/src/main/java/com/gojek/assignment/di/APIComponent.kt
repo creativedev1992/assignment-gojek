@@ -14,9 +14,5 @@ interface APIComponent {
     fun inject(remoteDataSource: RPMRemoteDataSource)
     fun inject(retrofitRepositoryImpl: RPMRepositoryImpl)
     fun inject(rpmViewModelFactory: RPMViewModelFactory)
-
-    //fun inject(notificationViewModel: NotificationViewModel)
     fun inject(activity: MainActivity)
-    //fun inject(notificationManager: NotificationManager)
-
 }

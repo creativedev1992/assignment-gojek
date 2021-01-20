@@ -7,12 +7,11 @@ import com.gojek.assignment.util.Resource
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 
-class RPMViewModel(val repository: RPMRepository?) : ViewModel() {
+open class RPMViewModel(val repository: RPMRepository?) : ViewModel() {
     private var _rpmLiveData = MutableLiveData<Resource<Any>>()
     val rpmLiveData = _rpmLiveData
     suspend fun fetchRPM() {
         repository?.getRPM()?.collect {
-            Log.d("check", "collect" + it)
             _rpmLiveData.postValue(it)
         }
 

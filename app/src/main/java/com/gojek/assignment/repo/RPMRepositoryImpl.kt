@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class RPMRepositoryImpl : RPMRepository {
+open class RPMRepositoryImpl : RPMRepository {
     @Inject
     lateinit var rpmRemoteDataSource: RPMRemoteDataSource
 
